@@ -1,3 +1,9 @@
+import sys
+
+# This line checks whether this script is running on Graphics systems, and gets my local numpy installation
+# if it is.
+if "/usr/lib64/python2.5/site-packages" in sys.path:
+	sys.path.append('/igl/home00/tcmacw/numpy-1.0.4')
 import numpy
 from Numeric import *
 

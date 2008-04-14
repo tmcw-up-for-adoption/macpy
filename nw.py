@@ -1,9 +1,3 @@
-import sys
-
-# This line checks whether this script is running on Graphics systems, and gets my local numpy installation
-# if it is.
-if "/usr/lib64/python2.5/site-packages" in sys.path:
-	sys.path.append('/igl/home00/tcmacw/numpy-1.0.4')
 import numpy
 from Numeric import *
 
@@ -19,7 +13,10 @@ from Numeric import *
 	Which in this case is O( (len(a) + len(b))^2 )
 '''
 
-class 	AlignNW(object):
+class AlignNW(object):
+	smiss = 1
+	smatch = 0
+	sspace = 1
 	def __init__(self):
 		self.viz = False
 		self.a = ""
@@ -27,12 +24,13 @@ class 	AlignNW(object):
 		self.a_res = ""
 		self.b_res = ""
 		self.path = []
+		self.score = 0
 
 	def sim(self, a, b):
 		if a == b:
-			return 1
-		else:
 			return 0
+		else:
+			return 1
 
 	def align(self, a, b):
 		matrix = self.build_matrix(a, b)
@@ -58,28 +56,32 @@ class 	AlignNW(object):
 				ao = a[i - 1] + ao
 				bo = "-" + bo
 				i = i - 1
+				self.score = self.score + self.sspace
 			# Up
 			elif current == up:
 				ao = "-" + ao
 				bo = b[j - 1] + bo
 				j = j - 1
-		# Stuck on the left
+				self.score = self.score + self.sspace
+		# Stuck on the top?
 		while i > 0:
 			ao = a[i - 1] + ao
 			bo = "-" + bo
 			i = i - 1
+			self.score = self.score + self.sspace
 		# Stuck on the right
 		while j > 0:
 			ao = "-" + ao
 			bo = b[j - 1] + bo
 			j = j - 1
+			self.score = self.score + self.sspace
 		self.a_res = ao
 		self.b_res = bo
 		self.matrix = matrix
+		return self.score
 
 	def build_matrix(self, a, b):
-		d = 0 #this should be changed in the final project
-		# create the initial matrix	
+		d = 0
 		matrix = zeros((len(a) + 1, len(b) + 1))
 		for y in range(len(a)):
 			matrix[y, 0] = d * y
@@ -104,15 +106,29 @@ class 	AlignNW(object):
 					else:
 						print " "+str(self.matrix[x,y])+" ",
 				print ""
+# End AlignNW
 
-#	def sp(seqs):\
-#		matrix = zeros((len(seqs[0]), len(seqs[1]), len(seqs[2])))
-#		print matrix
+class AlignSP:
+	def build_matrix(self, a, b, c):
+		score =  zeros((len(a), len(b), len(c))) # pg. 12
+		option = zeros((len(a), len(b), len(c))) # pg. 12
+		d = 0
+		for x in range(len(a)):
+			score[x, 0, 0] = d * x
+		for y in range(len(b)):
+			score[0, y, 0] = d * y
+		for z in range(len(c)):
+			score[0, 0, z] = d * z
+		for x in range(1, len(a) + 1):
+			for y in range(1, len(b) + 1):
+				for z in range(1, len(c) + 1):
+					
+
 
 nw = AlignNW()
 nw.viz = True
-nw.align("abc", "abca")
-print nw.trace()
+print nw.align("TCCAGCCCCAGGA", "TCCAGCCCCAGGA")
+nw.trace()
 #m = build_matrix("TCCAGCCCCAGGA", "TAGTCCTCA")
 #get_alignment(m, "TCCAGCCCCAGGA", "TAGTCCTCA")
 

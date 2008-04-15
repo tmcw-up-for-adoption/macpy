@@ -109,9 +109,14 @@ class AlignNW(object):
 # End AlignNW
 
 class AlignSP:
+	def sim(self, a, b, c):
+		if a == b == c:
+			return 0
+		else:
+			return 1
 	def build_matrix(self, a, b, c):
-		score =  zeros((len(a), len(b), len(c))) # pg. 12
-		option = zeros((len(a), len(b), len(c))) # pg. 12
+		score =  zeros((len(a) + 1, len(b) + 1, len(c) + 1)) # pg. 12
+		option = zeros((len(a) + 1, len(b) + 1, len(c) + 1)) # pg. 12
 		d = 0
 		for x in range(len(a)):
 			score[x, 0, 0] = d * x
@@ -122,13 +127,26 @@ class AlignSP:
 		for x in range(1, len(a) + 1):
 			for y in range(1, len(b) + 1):
 				for z in range(1, len(c) + 1):
-					
+					# 7 possibilities here. Just imagine a hypercube with one section taken out.
+					# (2 * 2 * 2) - 1 = 7
+					score[x, y, z] = max(
+						[ score[x - 1, y - 1, z - 1] + self.sim(a[x - 1], b[y - 1], c[z - 1]),
+							score[x - 1, y - 1, z],
+							score[x - 1, y,     z],
+							score[x - 1, y,   , z - 1],
+							score[x    , y - 1, z],
+							score[x    , y,   , z - 1],
+							score[x    , y - 1, z - 1] ])
 
 
 nw = AlignNW()
 nw.viz = True
 print nw.align("TCCAGCCCCAGGA", "TCCAGCCCCAGGA")
 nw.trace()
+
+sp = AlignSP()
+
+sp.build_matrix("ABC", "AB", "A")
 #m = build_matrix("TCCAGCCCCAGGA", "TAGTCCTCA")
 #get_alignment(m, "TCCAGCCCCAGGA", "TAGTCCTCA")
 

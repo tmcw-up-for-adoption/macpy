@@ -24,6 +24,7 @@ class AlignNW(object):
 		self.a_res = ""
 		self.b_res = ""
 		self.path = []
+		self.steps = []
 		self.score = 0
 
 	def sim(self, a, b):
@@ -150,14 +151,14 @@ class AlignSP:
 							score[x    , y - 1, z - 1] ])'''
 
 
-nw = AlignNW()
-nw.viz = True
-print nw.align("TCCAGCCCCAGGA", "TCCAGCCCCAGGA")
-nw.trace()
+#nw = AlignNW()
+#nw.viz = True
+#print nw.align("TCCAGCCCCAGGA", "TCCAGCCCCAGGA")
+#nw.trace()
 
-sp = AlignSP()
+#sp = AlignSP()
 
-sp.build_matrix("ABC", "AB", "A")
+#sp.build_matrix("ABC", "AB", "A")
 #m = build_matrix("TCCAGCCCCAGGA", "TAGTCCTCA")
 #get_alignment(m, "TCCAGCCCCAGGA", "TAGTCCTCA")
 

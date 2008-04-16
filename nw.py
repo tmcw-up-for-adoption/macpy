@@ -108,6 +108,17 @@ class AlignNW(object):
 				print ""
 # End AlignNW
 
+def permutations(L):
+    if len(L) == 1:
+        yield [L[0]]
+    elif len(L) >= 2:
+        (a, b) = (L[0:1], L[1:])
+        for p in permutations(b):
+            for i in range(len(p)+1):
+                yield b[:i] + a + b[i:]
+
+# print list(permutations(['a', 'b', 'c']))
+
 class AlignSP:
 	def sim(self, a, b, c):
 		if a == b == c:
@@ -124,7 +135,7 @@ class AlignSP:
 			score[0, y, 0] = d * y
 		for z in range(len(c)):
 			score[0, 0, z] = d * z
-		for x in range(1, len(a) + 1):
+'''		for x in range(1, len(a) + 1):
 			for y in range(1, len(b) + 1):
 				for z in range(1, len(c) + 1):
 					# 7 possibilities here. Just imagine a hypercube with one section taken out.
@@ -136,7 +147,7 @@ class AlignSP:
 							score[x - 1, y,   , z - 1],
 							score[x    , y - 1, z],
 							score[x    , y,   , z - 1],
-							score[x    , y - 1, z - 1] ])
+							score[x    , y - 1, z - 1] ])'''
 
 
 nw = AlignNW()

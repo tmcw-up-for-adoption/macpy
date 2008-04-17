@@ -147,14 +147,75 @@ class AlignSP:
 				for z in range(1, len(c) + 1):
 					# 7 possibilities here. Just imagine a hypercube with one section taken out.
 					# (2 * 2 * 2) - 1 = 7
-					self.score[x, y, z] = max(
-						[ self.score[x - 1, y - 1, z - 1] + self.sim(a[x - 1], b[y - 1], c[z - 1]),
-							self.score[x - 1, y - 1, z],
-							self.score[x - 1, y,     z],
-							self.score[x - 1, y,     z - 1],
-							self.score[x    , y - 1, z],
-							self.score[x    , y,     z - 1],
-							self.score[x    , y - 1, z - 1] ])
+					options = [
+							# Diagonal							
+							self.score[x - 1, y - 1, z - 1] + self.sim(a[x - 1], b[y - 1], c[z - 1]), #0
+							self.score[x - 1, y - 1, z], #1
+							self.score[x - 1, y,     z], #2
+							self.score[x - 1, y,     z - 1], #3
+							self.score[x    , y - 1, z], #4
+							self.score[x    , y,     z - 1], #5
+							self.score[x    , y - 1, z - 1] ]
+					m = None
+					index = None					
+					for i in range(len(options)):
+						if options[i] > m:
+							m = options[i]
+							index = i
+					self.score [x, y, z] = m
+					self.option[x, y, z] = index
+		return self.score
+	def align(self, a, b, c):
+		self.build_matrix(a, b, c)
+		ao = ""
+		bo = ""
+		co = ""
+		x = len(a)
+		y = len(b)
+		z = len(c)
+		while x > 0 and y > 0 and z > 0:
+			if self.option[x, y, z] == 0:
+				ao = a[x - 1] + ao
+				bo = b[y - 1] + bo
+				co = c[z - 1] + co 
+				x = x - 1
+				y = y - 1
+				z = z - 1
+			elif self.option[x, y, z] == 1:
+				ao = a[x - 1] + ao
+				bo = b[y - 1] + bo
+				co = "-" + co
+				x = x - 1
+				y = y - 1
+			elif self.option[x, y, z] == 2:
+				ao = a[x - 1] + ao
+				bo = "-" + bo
+				co = "-" + co
+				x = x - 1
+			elif self.option[x, y, z] == 3:
+				ao = a[x - 1] + ao
+				bo = "-" + bo
+				co = c[z - 1] + co
+				x = x - 1
+				z = z - 1
+			elif self.option[x, y, z] == 4:
+				ao = "-" + ao
+				bo = b[y - 1] + bo
+				co = "-" + co
+				y = y - 1
+			elif self.option[x, y, z] == 5:
+				ao = "-" + ao
+				bo = "-" + bo
+				co = c[z - 1] + co
+				z = z -1
+			elif self.option[x, y, z] == 6:
+				ao = "-" + ao
+				bo = b[y - 1] + bo
+				co = c[z - 1] + co
+				y = y - 1
+				z = z - 1
+		print ao, bo, co
+		
 
 
 #nw = AlignNW()
@@ -165,4 +226,5 @@ class AlignSP:
 #sp(["TCC", "TA", "TCG"])
 
 s = AlignSP()
-print s.build_matrix("AC", "AG", "AT")
+s.align("AC", "AG", "CAT")
+print s.score

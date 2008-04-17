@@ -120,35 +120,41 @@ def permutations(L):
 
 # print list(permutations(['a', 'b', 'c']))
 
+'''
+	Align via generalized NW
+	Requires O(n^3) space
+'''
+
 class AlignSP:
+	# Three-way score function.
 	def sim(self, a, b, c):
 		if a == b == c:
 			return 0
 		else:
 			return 1
 	def build_matrix(self, a, b, c):
-		score =  zeros((len(a) + 1, len(b) + 1, len(c) + 1)) # pg. 12
-		option = zeros((len(a) + 1, len(b) + 1, len(c) + 1)) # pg. 12
+		self.score =  zeros((len(a) + 1, len(b) + 1, len(c) + 1)) # pg. 12
+		self.option = zeros((len(a) + 1, len(b) + 1, len(c) + 1)) # pg. 12
 		d = 0
 		for x in range(len(a)):
-			score[x, 0, 0] = d * x
+			self.score[x, 0, 0] = d * x
 		for y in range(len(b)):
-			score[0, y, 0] = d * y
+			self.score[0, y, 0] = d * y
 		for z in range(len(c)):
-			score[0, 0, z] = d * z
-'''		for x in range(1, len(a) + 1):
+			self.score[0, 0, z] = d * z
+		for x in range(1, len(a) + 1):
 			for y in range(1, len(b) + 1):
 				for z in range(1, len(c) + 1):
 					# 7 possibilities here. Just imagine a hypercube with one section taken out.
 					# (2 * 2 * 2) - 1 = 7
-					score[x, y, z] = max(
-						[ score[x - 1, y - 1, z - 1] + self.sim(a[x - 1], b[y - 1], c[z - 1]),
-							score[x - 1, y - 1, z],
-							score[x - 1, y,     z],
-							score[x - 1, y,   , z - 1],
-							score[x    , y - 1, z],
-							score[x    , y,   , z - 1],
-							score[x    , y - 1, z - 1] ])'''
+					self.score[x, y, z] = max(
+						[ self.score[x - 1, y - 1, z - 1] + self.sim(a[x - 1], b[y - 1], c[z - 1]),
+							self.score[x - 1, y - 1, z],
+							self.score[x - 1, y,     z],
+							self.score[x - 1, y,     z - 1],
+							self.score[x    , y - 1, z],
+							self.score[x    , y,     z - 1],
+							self.score[x    , y - 1, z - 1] ])
 
 
 #nw = AlignNW()
@@ -156,10 +162,7 @@ class AlignSP:
 #print nw.align("TCCAGCCCCAGGA", "TCCAGCCCCAGGA")
 #nw.trace()
 
-#sp = AlignSP()
-
-#sp.build_matrix("ABC", "AB", "A")
-#m = build_matrix("TCCAGCCCCAGGA", "TAGTCCTCA")
-#get_alignment(m, "TCCAGCCCCAGGA", "TAGTCCTCA")
-
 #sp(["TCC", "TA", "TCG"])
+
+s = AlignSP()
+print s.build_matrix("AC", "AG", "AT")

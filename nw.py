@@ -29,9 +29,9 @@ class AlignNW(object):
 
 	def sim(self, a, b):
 		if a == b:
-			return 0
-		else:
 			return 1
+		else:
+			return -1
 
 	def align(self, a, b):
 		matrix = self.build_matrix(a, b)
@@ -107,18 +107,7 @@ class AlignNW(object):
 					else:
 						print " "+str(self.matrix[x,y])+" ",
 				print ""
-# End AlignNW
 
-def permutations(L):
-    if len(L) == 1:
-        yield [L[0]]
-    elif len(L) >= 2:
-        (a, b) = (L[0:1], L[1:])
-        for p in permutations(b):
-            for i in range(len(p)+1):
-                yield b[:i] + a + b[i:]
-
-# print list(permutations(['a', 'b', 'c']))
 
 '''
 	Align via generalized NW
@@ -129,9 +118,9 @@ class AlignSP:
 	# Three-way score function.
 	def sim(self, a, b, c):
 		if a == b == c:
-			return 0
-		else:
 			return 1
+		else:
+			return -1
 	def build_matrix(self, a, b, c):
 		self.score =  zeros((len(a) + 1, len(b) + 1, len(c) + 1)) # pg. 12
 		self.option = zeros((len(a) + 1, len(b) + 1, len(c) + 1)) # pg. 12
@@ -174,6 +163,7 @@ class AlignSP:
 		y = len(b)
 		z = len(c)
 		while x > 0 and y > 0 and z > 0:
+			print "option: ", self.option[x, y, z]
 			if self.option[x, y, z] == 0:
 				ao = a[x - 1] + ao
 				bo = b[y - 1] + bo
@@ -214,17 +204,20 @@ class AlignSP:
 				co = c[z - 1] + co
 				y = y - 1
 				z = z - 1
-		print ao, bo, co
+		print ao
+		print bo
+		print co
 		
 
 
-#nw = AlignNW()
-#nw.viz = True
-#print nw.align("TCCAGCCCCAGGA", "TCCAGCCCCAGGA")
+nw = AlignNW()
+nw.viz = True
+nw.align("caats", "cats")
+print nw.a_res
+print nw.b_res
 #nw.trace()
 
 #sp(["TCC", "TA", "TCG"])
 
 s = AlignSP()
-s.align("AC", "AG", "CAT")
-print s.score
+s.align("cats", "caaaats", "dawgs")

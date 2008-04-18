@@ -15,9 +15,10 @@ end
 #	puts i.to_s << "," << t.split("\n").last.split()[1]
 #end
 
-for i in 1...100
+for i in 1..10
 	s1 = gen_string(i * 10)
 	s2 = gen_string(i * 10)
-	t = `python test.py #{s1} #{s2}`
+	s3 = gen_string(i * 10)
+	t = `python test_sp.py #{s1} #{s2} #{s3}`	
 	puts i.to_s << "," << t.split("\n").first.split()[4]
 end

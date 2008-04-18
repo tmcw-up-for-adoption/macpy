@@ -163,7 +163,6 @@ class AlignSP:
 		y = len(b)
 		z = len(c)
 		while x > 0 and y > 0 and z > 0:
-			print "option: ", self.option[x, y, z]
 			if self.option[x, y, z] == 0:
 				ao = a[x - 1] + ao
 				bo = b[y - 1] + bo
@@ -204,20 +203,17 @@ class AlignSP:
 				co = c[z - 1] + co
 				y = y - 1
 				z = z - 1
-		print ao
-		print bo
-		print co
 		
 
 
-nw = AlignNW()
-nw.viz = True
-nw.align("caats", "cats")
-print nw.a_res
-print nw.b_res
+#nw = AlignNW()
+#nw.viz = True
+#nw.align("caats", "cats")
+#print nw.a_res
+#print nw.b_res
 #nw.trace()
 
 #sp(["TCC", "TA", "TCG"])
 
-s = AlignSP()
-s.align("cats", "caaaats", "dawgs")
+#s = AlignSP()
+#s.align("cats", "caaaats", "dawgs")

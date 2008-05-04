@@ -21,6 +21,3 @@ class Fasta(object):
 			self.seqs.append(
 				[parts[0], ''.join(parts[1:])])
 		return self.seqs
-
-f = Fasta()
-print f.read('test.fasta')

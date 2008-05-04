@@ -1,4 +1,5 @@
 import numpy
+from fasta import Fasta
 from Numeric import *
 
 '''
@@ -18,6 +19,7 @@ class AlignNW(object):
 	smatch = 0
 	sspace = 1
 	def __init__(self):
+		self.f_parser = Fasta()
 		self.viz = False
 		self.a = ""
 		self.b = ""
@@ -32,6 +34,10 @@ class AlignNW(object):
 			return 1
 		else:
 			return -1
+
+	def falign(self, fasta_file):
+		seqs = self.f_parser.read(fasta_file)
+		self.align(seqs[0][1], seqs[1][1])
 
 	def align(self, a, b):
 		matrix = self.build_matrix(a, b)
@@ -302,8 +308,7 @@ class AlignMP:
 
 nw = AlignNW()
 nw.viz = True
-nw.align("caats", "cats")
-print nw.trace()
+nw.falign("test.fasta")
 print nw.a_res
 print nw.b_res
 #nw.trace()

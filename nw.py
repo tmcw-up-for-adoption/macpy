@@ -120,6 +120,8 @@ class AlignNW(object):
 '''
 
 class AlignSP:
+	def __init__(self):
+		self.f_parser = Fasta()
 	# Three-way score function.
 	def sim(self, a, b, c):
 		if a == b == c:
@@ -141,6 +143,7 @@ class AlignSP:
 				for z in range(1, len(c) + 1):
 					# 7 possibilities here. Just imagine a hypercube with one section taken out.
 					# (2 * 2 * 2) - 1 = 7
+					print "in loop:", x, y, z
 					options = [
 							# Diagonal							
 							self.score[x - 1, y - 1, z - 1] + self.sim(a[x - 1], b[y - 1], c[z - 1]), #0
@@ -159,6 +162,9 @@ class AlignSP:
 					self.score [x, y, z] = m
 					self.option[x, y, z] = index
 		return self.score
+	def falign(self, fasta_file):
+		seqs = self.f_parser.read(fasta_file)
+		self.align(seqs[0][1], seqs[1][1], seqs[2][1])
 	def align(self, a, b, c):
 		self.build_matrix(a, b, c)
 		ao = ""
@@ -208,6 +214,9 @@ class AlignSP:
 				co = c[z - 1] + co
 				y = y - 1
 				z = z - 1
+			self.a_res = ao
+			self.b_res = bo
+			self.c_res = co
 
 
 
@@ -306,14 +315,18 @@ class AlignMP:
 		
 
 
-nw = AlignNW()
-nw.viz = True
-nw.falign("test.fasta")
-print nw.a_res
-print nw.b_res
+#nw = AlignNW()
+#nw.viz = True
+#nw.falign("test.fasta")
+#print nw.a_res
+#print nw.b_res
+
+sp = AlignSP()
+sp.falign("sample.fasta")
+print sp.a_res
+print sp.b_res
+print sp.c_res
 #nw.trace()
 
 #sp(["TCC", "TA", "TCG"])
 
-#s = AlignSP()
-#s.align("cats", "caaaats", "dawgs")

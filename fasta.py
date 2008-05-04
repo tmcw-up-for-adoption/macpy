@@ -6,7 +6,7 @@ class Fasta(object):
 		self.seqs = []
 	def read(self, filehandle):
 		try:		
-			f = open('test.fasta')
+			f = open(filehandle)
 		except IOError:
 			print "Fasta file did not exist"
 			return
